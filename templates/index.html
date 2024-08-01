@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Credit Risk Model</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                margin: 0;
+                padding: 0;
+                background-color: #f7f7f7;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 100vh;
+                overflow: hidden;
+            }
+            .container {
+                background: white;
+                padding: 20px 40px;
+                border-radius: 10px;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                max-width: 600px;
+                width: 100%;
+                max-height: 90vh;
+                overflow-y: auto;
+            }
+            h1 {
+                text-align: center;
+                color: #333;
+            }
+            .instructions {
+                font-size: 14px;
+                color: #666;
+                margin-bottom: 20px;
+                text-align: center;
+            }
+            form {
+                display: flex;
+                flex-direction: column;
+            }
+            .form-group {
+                margin-bottom: 15px;
+            }
+            label {
+                display: block;
+                margin-bottom: 5px;
+                color: #333;
+            }
+            input[type="text"] {
+                width: 100%;
+                padding: 10px;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+            }
+            button {
+                padding: 10px 15px;
+                border: none;
+                border-radius: 5px;
+                background-color: #007bff;
+                color: white;
+                font-size: 16px;
+                cursor: pointer;
+                margin-top: 10px;
+            }
+            button:hover {
+                background-color: #0056b3;
+            }
+            .result {
+                font-size: 18px;
+                color: #333;
+                margin-top: 20px;
+                text-align: center;
+            }
+            .hidden-fields {
+                display: none;
+            }
+        </style>
+        <script>
+            function toggleFields() {
+                var hiddenFields = document.querySelector('.hidden-fields');
+                if (hiddenFields.style.display === 'none' || hiddenFields.style.display === '') {
+                    hiddenFields.style.display = 'block';
+                } else {
+                    hiddenFields.style.display = 'none';
+                }
+            }
+//                 function hideResult() {
+//                     var resultDiv = document.querySelector('.result');
+//                     resultDiv.style.display = 'none';
+//                 }
+
+//                 window.onload = function() {
+//                     // Hide result on page load
+//                     hideResult();
+
+//                     // Add event listeners to all input fields to hide result when focused
+//                     var inputs = document.querySelectorAll('input[type="text"], input[type="password"], input[type="email"], input[type="number"], input[type="search"], input[type="tel"], input[type="url"]');
+//                     inputs.forEach(function(input) {
+//                         input.addEventListener('focus', hideResult);
+//                     });
+// };
+
+        
+        </script>
+    </head>
+<body>
+    <div class="container">
+        <h1>Credit Risk Model</h1>
+        <div class="instructions">
+            Please add your customer's input below. Click the "Toggle Extra Fields" button to add more inputs if needed.
+        </div>
+        <form method="POST">
+            <!-- Always visible fields -->
+            <div class="form-group">
+                <label for="BanruptcyInd">Bankruptcy Indicator:</label>
+                <input type="text" id="BanruptcyInd" name="BanruptcyInd" value="{{ default_values.BanruptcyInd }}" placeholder="{{ default_values.BanruptcyInd }}" required>
+            </div>
+            <div class="form-group">
+                <label for="TLBadDerogCnt">Bad Dept plus Public Derogatories:</label>
+                <input type="text" id="TLBadDerogCnt" name="TLBadDerogCnt" value="{{ default_values.TLBadDerogCnt }}" placeholder="{{ default_values.TLBadDerogCnt }}" required>
+            </div>
+            <div class="form-group">
+                <label for="InqFinanceCnt24">Finance Inquires 24 Months:</label>
+                <input type="text" id="InqFinanceCnt24" name="InqFinanceCnt24" value="{{ default_values.InqFinanceCnt24 }}" placeholder="{{ default_values.InqFinanceCnt24 }}" required>
+            </div>
+            <div class="form-group">
+                <label for="TLDel3060Cnt24">Number Trade Lines 30 or 60 Days 24 Months:</label>
+                <input type="text" id="TLDel3060Cnt24" name="TLDel3060Cnt24" value="{{ default_values.TLDel3060Cnt24 }}" placeholder="{{ default_values.TLDel3060Cnt24 }}" required>
+            </div>
+            <div class="form-group">
+                <label for="InqTimeLast">Time Since Last Inquiry:</label>
+                <input type="text" id="InqTimeLast" name="InqTimeLast" value="{{ default_values.InqTimeLast }}" placeholder="{{ default_values.InqTimeLast }}" required>
+            </div>
+
+            <!-- Hidden fields -->
+            <div class="hidden-fields">
+                <div class="form-group">
+                    <label for="DerogCnt">Number Public Derogatories:</label>
+                    <input type="text" id="DerogCnt" name="DerogCnt" value="{{ default_values.DerogCnt }}" placeholder="{{ default_values.DerogCnt }}">
+                </div>
+                <div class="form-group">
+                    <label for="CollectCnt">Collections:</label>
+                    <input type="text" id="CollectCnt" name="CollectCnt" value="{{ default_values.CollectCnt }}" placeholder="{{ default_values.CollectCnt }}">
+                </div>
+                <div class="form-group">
+                    <label for="InqCnt06">Inquiries 6 Months:</label>
+                    <input type="text" id="InqCnt06" name="InqCnt06" value="{{ default_values.InqCnt06 }}" placeholder="{{ default_values.InqCnt06 }}">
+                </div>
+                <div class="form-group">
+                    <label for="TLTimeFirst">Time Since First Trade Line:</label>
+                    <input type="text" id="TLTimeFirst" name="TLTimeFirst" value="{{ default_values.TLTimeFirst }}" placeholder="{{ default_values.TLTimeFirst }}">
+                </div>
+                <div class="form-group">
+                    <label for="TLTimeLast">Time Since Last Trade Line:</label>
+                    <input type="text" id="TLTimeLast" name="TLTimeLast" value="{{ default_values.TLTimeLast }}" placeholder="{{ default_values.TLTimeLast }}">
+                </div>
+                <div class="form-group">
+                    <label for="TLCnt03">Number Trade Lines Opened 3 Months:</label>
+                    <input type="text" id="TLCnt03" name="TLCnt03" value="{{ default_values.TLCnt03 }}" placeholder="{{ default_values.TLCnt03 }}">
+                </div>
+                <div class="form-group">
+                    <label for="TLCnt12">Number Trade Lines Opened 12 Months:</label>
+                    <input type="text" id="TLCnt12" name="TLCnt12" value="{{ default_values.TLCnt12 }}" placeholder="{{ default_values.TLCnt12 }}">
+                </div>
+                <div class="form-group">
+                    <label for="TLCnt24">Number Trade Lines Opened 24 Months:</label>
+                    <input type="text" id="TLCnt24" name="TLCnt24" value="{{ default_values.TLCnt24 }}" placeholder="{{ default_values.TLCnt24 }}">
+                </div>
+                <div class="form-group">
+                    <label for="TLCnt">Total Open Trade Lines:</label>
+                    <input type="text" id="TLCnt" name="TLCnt" value="{{ default_values.TLCnt }}" placeholder="{{ default_values.TLCnt }}">
+                </div>
+                <div class="form-group">
+                    <label for="TLSum">Total Balance All Trade Lines:</label>
+                    <input type="text" id="TLSum" name="TLSum" value="{{ default_values.TLSum }}" placeholder="{{ default_values.TLSum }}">
+                </div>
+                <div class="form-group">
+                    <label for="TLMaxSum">Total High Credit All Trade Lines:</label>
+                    <input type="text" id="TLMaxSum" name="TLMaxSum" value="{{ default_values.TLMaxSum }}" placeholder="{{ default_values.TLMaxSum }}">
+                </div>
+                <div class="form-group">
+                    <label for="TLSatCnt">Number Trade Lines Currently Satisfactory:</label>
+                    <input type="text" id="TLSatCnt" name="TLSatCnt" value="{{ default_values.TLSatCnt }}" placeholder="{{ default_values.TLSatCnt }}">
+                </div>
+                <div class="form-group">
+                    <label for="TLDel60Cnt">Number Trade Lines 60 Days or Worse Ever:</label>
+                    <input type="text" id="TLDel60Cnt" name="TLDel60Cnt" value="{{ default_values.TLDel60Cnt }}" placeholder="{{ default_values.TLDel60Cnt }}">
+                </div>
+                <div class="form-group">
+                    <label for="TLBadCnt24">Number Trade Lines Bad 24 Months:</label>
+                    <input type="text" id="TLBadCnt24" name="TLBadCnt24" value="{{ default_values.TLBadCnt24 }}" placeholder="{{ default_values.TLBadCnt24 }}">
+                </div>
+                <div class="form-group">
+                    <label for="TL75UtilCnt">Number Trade Lines 75 pct Utilized:</label>
+                    <input type="text" id="TL75UtilCnt" name="TL75UtilCnt" value="{{ default_values.TL75UtilCnt }}" placeholder="{{ default_values.TL75UtilCnt }}">
+                </div>
+                <div class="form-group">
+                    <label for="TL50UtilCnt">Number Trade Lines 50 pct Utilized:</label>
+                    <input type="text" id="TL50UtilCnt" name="TL50UtilCnt" value="{{ default_values.TL50UtilCnt }}" placeholder="{{ default_values.TL50UtilCnt }}">
+                </div>
+                <div class="form-group">
+                    <label for="TLBalHCPct">Percent Trade Line Balance to High Credit:</label>
+                    <input type="text" id="TLBalHCPct" name="TLBalHCPct" value="{{ default_values.TLBalHCPct }}" placeholder="{{ default_values.TLBalHCPct }}">
+                </div>
+                <div class="form-group">
+                    <label for="TLSatPct">Percent Satisfactory to Total Trade Lines:</label>
+                    <input type="text" id="TLSatPct" name="TLSatPct" value="{{ default_values.TLSatPct }}" placeholder="{{ default_values.TLSatPct }}">
+                </div>
+                <div class="form-group">
+                    <label for="TLDel60CntAll">Number Trade Lines 60 Days or Worse Ever:</label>
+                    <input type="text" id="TLDel60CntAll" name="TLDel60CntAll" value="{{ default_values.TLDel60CntAll }}" placeholder="{{ default_values.TLDel60CntAll }}">
+                </div>
+                <div class="form-group">
+                    <label for="TLDel90Cnt24">Number Trade Lines 90+ 24 Months:</label>
+                    <input type="text" id="TLDel90Cnt24" name="TLDel90Cnt24" value="{{ default_values.TLDel90Cnt24 }}" placeholder="{{ default_values.TLDel90Cnt24 }}">
+                </div>
+                <div class="form-group">
+                    <label for="TLOpenPct">Percent Trade Lines Open:</label>
+                    <input type="text" id="TLOpenPct" name="TLOpenPct" value="{{ default_values.TLOpenPct }}" placeholder="{{ default_values.TLOpenPct }}">
+                </div>
+                <div class="form-group">
+                    <label for="TLDel60Cnt24">Percent Trade Lines Open:</label>
+                    <input type="text" id="TLDel60Cnt24" name="TLDel60Cnt24" value="{{ default_values.TLDel60Cnt24 }}" placeholder="{{ default_values.TLDel60Cnt24 }}">
+                </div>
+                <div class="form-group">
+                    <label for="TLOpen24Pct">Percent Trade Lines Opened 24 Months:</label>
+                    <input type="text" id="TLOpen24Pct" name="TLOpen24Pct" value="{{ default_values.TLOpen24Pct }}" placeholder="{{ default_values.TLOpen24Pct }}">
+                </div>
+            </div>
+            
+            <button type="button" onclick="toggleFields()">Toggle Extra Fields</button>
+            <button type="submit">Submit</button>
+        </form>
+        {% if result %}
+        <div class="result">
+            <h2>Result</h2>
+            <p>{{ result }}</p>
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>
